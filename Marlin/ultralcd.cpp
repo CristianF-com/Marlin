@@ -972,13 +972,12 @@ void lcd_quick_feedback(const bool clear_buttons) {
     #if ENABLED(BLTOUCH_LCD_VOLTAGE_MENU)
       void bltouch_report() {
         SERIAL_ECHOLNPAIR("EEPROM Last BLTouch Mode - ", (int)bltouch_last_written_mode);
-        SERIAL_ECHOLNPGM("Configuration BLTouch Mode - "
+        SERIAL_ECHOPGM("Configuration BLTouch Mode - ");
           #if ENABLED(BLTOUCH_SET_5V_MODE)
-            "5V"
+            SERIAL_ECHOLNPGM("5V");
           #else
-            "OD"
+            SERIAL_ECHOLNPGM("OD");
           #endif
-        );
         char mess[21];
         strcpy_P(mess, PSTR("BLTouch Mode - "));
         strcpy_P(&mess[15], bltouch_last_written_mode ? PSTR("5V") : PSTR("OD"));
@@ -1176,7 +1175,13 @@ void lcd_quick_feedback(const bool clear_buttons) {
     #if ENABLED(LED_CONTROL_MENU)
       MENU_ITEM(submenu, MSG_LED_CONTROL, lcd_led_menu);
     #endif
-
+    /*cf - add octoprint and other contros por PSU controlled by cpio in linux*/
+MENU_ITEM(gcode, "Cancel Print (Octoprint)", PSTR("M118 //action:cancel"));
+MENU_ITEM(gcode, "Power OFF", PSTR("M118 //action:cancel\nM118 //action:poweroff"));
+MENU_ITEM(gcode, "Power ON", PSTR("M118 //action:poweron"));
+MENU_ITEM(gcode, "Shut Down (Octoprint)", PSTR("M118 //action:cancel\nM118 //action:shutdown"));
+MENU_ITEM(gcode, "Restart (Octoprint)", PSTR("M118 //action:cancel\nM118 //action:restart"));
+/*cf - end*/
     END_MENU();
   }
 
